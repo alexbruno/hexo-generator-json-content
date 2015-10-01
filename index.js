@@ -1,9 +1,19 @@
 hexo.extend.generator.register(hexo_generator_json_content);
 
 function hexo_generator_json_content(locals) {
-  return hexo.route.set('content.json', JSON.stringify({
+  var json = {
     config: hexo.config,
-    posts: locals.posts.sort('-date'),
-    pages: locals.pages
-  }));
+    posts: [],
+    pages: []
+  };
+  
+  locals.posts.sort('-date').each(function (post) {
+    json.posts.push(post);
+  });
+  
+  locals.pages.each(function (page) {
+    json.pages.push(page);
+  });
+  
+  return hexo.route.set('content.json', JSON.stringify(json));
 }
