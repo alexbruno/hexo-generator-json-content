@@ -1,0 +1,26 @@
+{
+  "name": "hexo-generator-json-content",
+  "version": "0.0.1",
+  "description": "Hexo plugin to generate a JSON file with the content of posts and pages to generic use or consumption, like AJAX site search or public content API",
+  "main": "index.js",
+  "scripts": {
+    "test": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexbruno/hexo-generator-json-content.git"
+  },
+  "keywords": [
+    "hexo",
+    "json",
+    "templating",
+    "generator",
+    "content"
+  ],
+  "author": "Alex Bruno Cáceres <webmaster@alexbruno.net.br>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alexbruno/hexo-generator-json-content/issues"
+  },
+  "homepage": "https://github.com/alexbruno/hexo-generator-json-content"
+}
