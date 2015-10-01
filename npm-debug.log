@@ -5,7 +5,7 @@
 4 verbose node symlink /usr/bin/node
 5 info git [ 'status', '--porcelain' ]
 6 verbose stack Error: Git working directory not clean.
-6 verbose stack M index.js
+6 verbose stack D npm-debug.log
 6 verbose stack     at /usr/lib/node_modules/npm/lib/version.js:172:21
 6 verbose stack     at ChildProcess.exithandler (child_process.js:635:7)
 6 verbose stack     at ChildProcess.EventEmitter.emit (events.js:98:17)
@@ -17,7 +17,7 @@
 10 error node v0.10.25
 11 error npm  v3.3.5
 12 error Git working directory not clean.
-12 error M index.js
+12 error D npm-debug.log
 13 error If you need help, you may report this error at:
 13 error     <https://github.com/npm/npm/issues>
 14 verbose exit [ 1, true ]
