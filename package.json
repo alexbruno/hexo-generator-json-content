@@ -22,5 +22,6 @@
   "bugs": {
     "url": "https://github.com/alexbruno/hexo-generator-json-content/issues"
   },
-  "homepage": "https://github.com/alexbruno/hexo-generator-json-content"
+  "homepage": "https://github.com/alexbruno/hexo-generator-json-content",
+  "dependencies": {}
 }

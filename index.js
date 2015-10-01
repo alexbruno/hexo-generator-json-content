@@ -2,30 +2,60 @@ hexo.extend.generator.register(hexo_generator_json_content);
 
 function hexo_generator_json_content(locals) {
   var json = {
-    config: hexo.config,
+    meta: {
+      title: hexo.config.title,
+      subtitle: hexo.config.subtitle,
+      description: hexo.config.description,
+      author: hexo.config.author,
+      url: hexo.config.url,
+    },
     posts: [],
     pages: []
   };
   
   locals.pages.each(function (page) {
-    json.pages.push(page);
+    var item = {
+      title: page.title,
+      date: page.date,
+      updated: page.updated,
+      comments: page.comments,
+      permalink: page.permalink
+    };
+    
+    json.pages.push(item);
   });
   
   locals.posts.sort('-date').each(function (post) {
-    var tags = [], cats = [];
+    if (!post.published) return;
+    
+    var item = {
+      title: post.title,
+      date: post.date,
+      updated: post.updated,
+      published: post.published,
+      comments: post.comments,
+      permalink: post.permalink,
+      tags: [],
+      categories: []
+    };
     
     post.tags.each(function (tag) {
-      tags.push(tag);
+      item.tags.push({
+        name: tag.name,
+        slug: tag.slug,
+        permalink: tag.permalink
+      });
     });
     
     post.categories.each(function (cat) {
-      cats.push(cat);
+      item.categories.push({
+        name: cat.name,
+        slug: cat.slug,
+        permalink: cat.permalink
+      });
     });
     
-    post.tags = tags;
-    post.categories = cats;
-    
-    json.posts.push(post);
+    json.posts.push(item);
   });
   
   return hexo.route.set('content.json', JSON.stringify(json));
