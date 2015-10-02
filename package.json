@@ -1,6 +1,6 @@
 {
   "name": "hexo-generator-json-content",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Hexo plugin to generate a JSON file with the content of posts and pages to generic use or consumption, like AJAX site search or public content API",
   "main": "index.js",
   "scripts": {
