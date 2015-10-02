@@ -65,6 +65,6 @@ posts: [{ //-> only published posts
 
 Coming soon...
 
-## Examples of use:
+## Examples of use
 
 Coming soon...
