@@ -8,7 +8,7 @@ It's useful to serve compact and agile content data for microservices like AJAX 
 ## Installation
 
 ```bash
-npm install --save hexo-generator-json-content
+npm i -S hexo-generator-json-content
 ```
 
 ## Usage
