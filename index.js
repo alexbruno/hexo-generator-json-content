@@ -1,62 +1,61 @@
 hexo.extend.generator.register(hexo_generator_json_content);
 
-function hexo_generator_json_content(locals) {
-  var json = {
-    meta: {
-      title: hexo.config.title,
-      subtitle: hexo.config.subtitle,
-      description: hexo.config.description,
-      author: hexo.config.author,
-      url: hexo.config.url,
+function hexo_generator_json_content(site) {
+  var minify = function (str) {
+      return str.trim().replace(/\n/g, ' ').replace(/\s+/g, ' ');
     },
-    posts: [],
-    pages: []
+    json = {
+      meta: {
+        title: hexo.config.title,
+        subtitle: hexo.config.subtitle,
+        description: hexo.config.description,
+        author: hexo.config.author,
+        url: hexo.config.url,
+      },
+      
+      pages: site.pages.map(function (page) {
+        return {
+          title: page.title,
+          slug: page.slug,
+          date: page.date,
+          updated: page.updated,
+          comments: page.comments,
+          permalink: page.permalink,
+          content: minify(page.raw)
+        };
+      }),
+      
+      posts: site.posts.sort('-date').filter(function (post) {
+        return post.published;
+      }).map(function (post) {
+        return {
+          title: post.title,
+          slug: post.slug,
+          date: post.date,
+          updated: post.updated,
+          comments: post.comments,
+          permalink: post.permalink,
+          content: minify(post.raw),
+          categories: post.categories.map(function (cat) {
+            return {
+              name: cat.name,
+              slug: cat.slug,
+              permalink: cat.permalink
+            };
+          }),
+          tags: post.tags.map(function (tag) {
+            return {
+              name: tag.name,
+              slug: tag.slug,
+              permalink: tag.permalink
+            };
+          })
+        };
+      })
+    };
+  
+  return {
+    path: 'content.json',
+    data: JSON.stringify(json)
   };
-  
-  locals.pages.each(function (page) {
-    var item = {
-      title: page.title,
-      date: page.date,
-      updated: page.updated,
-      comments: page.comments,
-      permalink: page.permalink
-    };
-    
-    json.pages.push(item);
-  });
-  
-  locals.posts.sort('-date').each(function (post) {
-    if (!post.published) return;
-    
-    var item = {
-      title: post.title,
-      date: post.date,
-      updated: post.updated,
-      published: post.published,
-      comments: post.comments,
-      permalink: post.permalink,
-      tags: [],
-      categories: []
-    };
-    
-    post.tags.each(function (tag) {
-      item.tags.push({
-        name: tag.name,
-        slug: tag.slug,
-        permalink: tag.permalink
-      });
-    });
-    
-    post.categories.each(function (cat) {
-      item.categories.push({
-        name: cat.name,
-        slug: cat.slug,
-        permalink: cat.permalink
-      });
-    });
-    
-    json.posts.push(item);
-  });
-  
-  return hexo.route.set('content.json', JSON.stringify(json));
 }
