@@ -21,6 +21,7 @@ function hexo_generator_json_content(site) {
           updated: page.updated,
           comments: page.comments,
           permalink: page.permalink,
+          excerpt: page.excerpt,
           content: minify(page.raw)
         };
       }),
@@ -35,6 +36,7 @@ function hexo_generator_json_content(site) {
           updated: post.updated,
           comments: post.comments,
           permalink: post.permalink,
+          excerpt: post.excerpt,
           content: minify(post.raw),
           categories: post.categories.map(function (cat) {
             return {
