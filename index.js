@@ -1,7 +1,10 @@
 hexo.extend.generator.register(hexo_generator_json_content);
 
 function hexo_generator_json_content(site) {
-  var minify = function (str) {
+  var stripe = function (str) {
+      return str.replace(/(<([^>]+)>)/ig, '');
+    },
+    minify = function (str) {
       return str.trim().replace(/\n/g, ' ').replace(/\s+/g, ' ');
     },
     json = {
@@ -21,8 +24,10 @@ function hexo_generator_json_content(site) {
           updated: page.updated,
           comments: page.comments,
           permalink: page.permalink,
-          excerpt: page.excerpt,
-          content: minify(page.raw)
+          excerpt: stripe(page.excerpt),
+          raw: page.raw,
+          content: page.content,
+          text: minify(stripe(page.content))
         };
       }),
       
@@ -36,8 +41,10 @@ function hexo_generator_json_content(site) {
           updated: post.updated,
           comments: post.comments,
           permalink: post.permalink,
-          excerpt: post.excerpt,
-          content: minify(post.raw),
+          excerpt: stripe(post.excerpt),
+          raw: post.raw,
+          content: post.content,
+          text: minify(stripe(post.content)),
           categories: post.categories.map(function (cat) {
             return {
               name: cat.name,

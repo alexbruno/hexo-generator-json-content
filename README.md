@@ -1,4 +1,3 @@
-
 # hexo-generator-json-content
 
 Hexo (https://hexo.io/) plugin to generate a JSON file for generic use or consumption with the contents of posts and pages.
@@ -33,7 +32,10 @@ pages: [{
   updated: page.updated,
   comments: page.comments,
   permalink: page.permalink,
-content: page.raw //-> minified
+  excerpt: page.excerpt //-> only text ;-)
+  raw: page.raw, //-> original MD
+  content: page.content, //-> final HTML
+  text: page.content //-> only text minified ;-)
 }],
 posts: [{ //-> only published posts
 	title: post.title,
@@ -42,7 +44,10 @@ posts: [{ //-> only published posts
   updated: post.updated,
   comments: post.comments,
   permalink: post.permalink,
-  content: post.raw //-> minified,
+  excerpt: post.excerpt, //-> only text ;-)
+  raw: post.raw, //-> original MD
+  content: post.content, //-> final HTML
+  text: post.content //-> only text minified ;-)
   categories: [{
     name: category.name,
     slug: category.slug,
@@ -55,6 +60,10 @@ posts: [{ //-> only published posts
   }]
 }]
 ```
+
+## Configuration
+
+Coming soon...
 
 ## Examples of use:
 
