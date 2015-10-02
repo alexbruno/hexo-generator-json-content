@@ -1,17 +1,17 @@
 
-#hexo-generator-json-content
+# hexo-generator-json-content
 
 Hexo (https://hexo.io/) plugin to generate a JSON file for generic use or consumption with the contents of posts and pages.
 
 It's useful to serve compact and agile content data for microservices like AJAX site search or public API.
 
-##Installation
+## Installation
 
 ```bash
 npm install --save hexo-generator-json-content
 ```
 
-##Usage
+## Usage
 
 Hexo will run the generator *automagically* when you run `hexo serve` or `hexo generate`.
 :)
@@ -27,13 +27,13 @@ meta: {
 	url: hexo.config.url
 },
 pages: [{
-	title: page.title,
+  title: page.title,
   slug: page.slug,
   date: page.date,
   updated: page.updated,
   comments: page.comments,
   permalink: page.permalink,
-  content: page.raw //-> minified
+content: page.raw //-> minified
 }],
 posts: [{ //-> only published posts
 	title: post.title,
@@ -56,6 +56,6 @@ posts: [{ //-> only published posts
 }]
 ```
 
-##Examples of use:
+## Examples of use:
 
 Coming soon...
