@@ -25,7 +25,7 @@ meta: {
 	author: hexo.config.author,
 	url: hexo.config.url
 },
-pages: [{
+pages: [{ //-> all pages (optional, configurable)
   title: page.title,
   slug: page.slug,
   date: page.date,
@@ -33,11 +33,11 @@ pages: [{
   comments: page.comments,
   permalink: page.permalink,
   excerpt: page.excerpt //-> only text ;-)
-  raw: page.raw, //-> original MD
-  content: page.content, //-> final HTML
-  text: page.content //-> only text minified ;-)
+  text: page.content, //-> only text minified ;-)
+  raw: page.raw, //-> original MD (optional, configurable)
+  content: page.content //-> final HTML (optional, configurable)
 }],
-posts: [{ //-> only published posts
+posts: [{ //-> only published posts (optional, configurable)
 	title: post.title,
   slug: post.slug,
   date: post.date,
@@ -45,9 +45,9 @@ posts: [{ //-> only published posts
   comments: post.comments,
   permalink: post.permalink,
   excerpt: post.excerpt, //-> only text ;-)
-  raw: post.raw, //-> original MD
-  content: post.content, //-> final HTML
-  text: post.content //-> only text minified ;-)
+  text: post.content, //-> only text minified ;-)
+  raw: post.raw, //-> original MD (optional, configurable)
+  content: post.content, //-> final HTML (optional, configurable)
   categories: [{
     name: category.name,
     slug: category.slug,
@@ -63,7 +63,23 @@ posts: [{ //-> only published posts
 
 ## Configuration
 
-Coming soon...
+You can configure some options in `_config.yml` to generate `content.json`.
+
+Default options are as follows:
+
+```yaml
+jsonContent:
+  pages:
+    raw: false
+    content: false
+  posts:
+    raw: false
+    content: false
+```
+
+The `raw` option includes original MARKDOWN string and `content` option includes final HTML string.
+
+You can also exclude pages or posts contents from `content.json` by setting `pages` or `posts` to `false`.
 
 ## Examples of use
 
