@@ -23,5 +23,7 @@
     "url": "https://github.com/alexbruno/hexo-generator-json-content/issues"
   },
   "homepage": "https://github.com/alexbruno/hexo-generator-json-content",
-  "dependencies": []
+  "dependencies": {
+    "keyword-extractor": "*"
+  }
 }

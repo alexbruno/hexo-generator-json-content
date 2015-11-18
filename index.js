@@ -1,16 +1,61 @@
+var keyword_extractor = require("keyword-extractor");
+
 hexo.extend.generator.register(hexo_generator_json_content);
 
 function hexo_generator_json_content(site) {
-  var stripe = function (str) {
+    var stripe = function (str) {
       return str.replace(/(<([^>]+)>)/ig, '');
     },
+
     minify = function (str) {
       return str.trim().replace(/\n/g, ' ').replace(/\s+/g, ' ');
     },
-    cfg = hexo.config.hasOwnProperty('jsonContent') ? hexo.config.jsonContent : {},
-    pages = cfg.hasOwnProperty('pages') ? cfg.pages : { raw: false, content: false },
-    posts = cfg.hasOwnProperty('posts') ? cfg.posts : { raw: false, content: false },
-    json = {
+
+    getKeywords = function (str) {
+      keywords = keyword_extractor.extract(str, {
+        language: "english",
+        remove_digits: true,
+        return_changed_case: true,
+        remove_duplicates: true
+      });
+
+      return keywords.join(' ');
+    },
+
+    cfg = hexo.config.hasOwnProperty('jsonContent') ? hexo.config.jsonContent : { meta: true },
+    pages = cfg.hasOwnProperty('pages') ? cfg.pages : { 
+      raw: false,
+      content: false,
+      title: true,
+      slug: true,
+      date: true,
+      updated: true,
+      comments: true,
+      path: true,
+      link: true,
+      permalink: true,
+      excerpt: true,
+      text: true,
+      stopwords: true
+    },
+    posts = cfg.hasOwnProperty('posts') ? cfg.posts : { 
+      raw: false, 
+      content: false,
+      title: true,
+      slug: true,
+      date: true,
+      updated: true,
+      comments: true,
+      path: true,
+      link: true,
+      permalink: true,
+      excerpt: true,
+      text: true,
+      categories: true,
+      tags: true,
+      stopwords: true
+    },
+    json = cfg.meta ? {
       meta: {
         title: hexo.config.title,
         subtitle: hexo.config.subtitle,
@@ -18,59 +63,75 @@ function hexo_generator_json_content(site) {
         author: hexo.config.author,
         url: hexo.config.url,
       }
-    };
+    } : {};
   
-  if (pages)
-    json.pages = site.pages.map(function (page) {
+  if (pages) {
+    var content = site.pages.map(function (page) {
       return {
-        title: page.title,
-        slug: page.slug,
-        date: page.date,
-        updated: page.updated,
-        comments: page.comments,
-        path: page.path,
-        link: page.link,
-        permalink: page.permalink,
-        excerpt: stripe(page.excerpt),
-        text: minify(stripe(page.content)),
+        title: pages.title ? page.title : null,
+        slug: pages.slug ? page.slug : null,
+        date: pages.date ? page.date : null,
+        updated: pages.updated ? page.updated : null,
+        comments: pages.comments ? page.comments : null,
+        path: pages.path ? page.path : null,
+        link: pages.link ? page.link : null,
+        permalink: pages.permalink ? page.permalink : null,
+        excerpt: pages.excerpt ? (!pages.stopwords ? getKeywords(stripe(page.excerpt)) : stripe(page.excerpt)) : null,
+        text: pages.text ? (!pages.stopwords ? getKeywords(stripe(page.content)) : minify(stripe(page.content))) : null,
         raw: pages.raw ? page.raw : null,
         content: pages.content ? page.content : null
       };
     });
+
+    if (posts || cfg.meta) {
+        json.pages = content;
+    }
+    else {
+        json = content;
+    }
+  }
   
-  if (posts)
-    json.posts = site.posts.sort('-date').filter(function (post) {
+  if (posts) {
+    var content = site.posts.sort('-date').filter(function (post) {
       return post.published;
     }).map(function (post) {
       return {
-        title: post.title,
-        slug: post.slug,
-        date: post.date,
-        updated: post.updated,
-        comments: post.comments,
-        path: post.path,
-        link: post.link,
-        permalink: post.permalink,
-        excerpt: stripe(post.excerpt),
-        text: minify(stripe(post.content)),
+        title: posts.title ? post.title : null,
+        slug: posts.slug ? post.slug : null,
+        date: posts.date ? post.date : null,
+        updated: posts.updated ? post.updated : null,
+        comments: posts.comments ? post.comments : null,
+        path: posts.path ? post.path : null,
+        link: posts.link ? post.link : null,
+        permalink: posts.permalink ? post.permalink : null,
+        excerpt: posts.excerpt ? (!posts.stopwords ? getKeywords(stripe(post.excerpt)) : stripe(post.excerpt)) : null,
+        text: posts.text ? (!posts.stopwords ? getKeywords(stripe(post.content)) : minify(stripe(post.content))) : null,
         raw: posts.raw ? post.raw : null,
         content: posts.content ? post.content : null,
-        categories: post.categories.map(function (cat) {
+        categories: posts.categories ? post.categories.map(function (cat) {
           return {
             name: cat.name,
             slug: cat.slug,
             permalink: cat.permalink
           };
-        }),
-        tags: post.tags.map(function (tag) {
+        }) : null,
+        tags: posts.tags ? post.tags.map(function (tag) {
           return {
             name: tag.name,
             slug: tag.slug,
             permalink: tag.permalink
           };
-        })
+        }) : null
       };
     });
+
+    if (pages || cfg.meta) {
+        json.posts = content;
+    }
+    else {
+        json = content;
+    }
+  }
   
   return {
     path: 'content.json',
