@@ -35,7 +35,7 @@ function hexo_generator_json_content(site) {
       permalink: true,
       excerpt: true,
       text: true,
-      stopwords: true
+      keywords: true
     },
     
     posts = cfg.hasOwnProperty('posts') ? cfg.posts : {
@@ -53,7 +53,7 @@ function hexo_generator_json_content(site) {
       text: true,
       categories: true,
       tags: true,
-      stopwords: true
+      keywords: true
     },
     
     json = cfg.meta ? {
