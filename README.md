@@ -2,7 +2,7 @@
 
 Hexo (https://hexo.io/) plugin to generate a JSON file for generic use or consumption with the contents of posts and pages.
 
-It's useful to serve compact and agile content data for microservices like AJAX site search, Twitter typeahead, or public API.
+It's useful to serve compact and agile content data for microservices like AJAX site search, Twitter typeahead or public API.
 
 ## Installation
 
@@ -13,7 +13,7 @@ npm i -S hexo-generator-json-content
 ## Usage
 
 Hexo will run the generator *automagically* when you run `hexo serve` or `hexo generate`.
-:)
+:smirk:
 
 Using the default settings, the `content.json` file will have the following structure:
 
@@ -25,7 +25,7 @@ meta: {
 	author: hexo.config.author,
 	url: hexo.config.url
 },
-pages: [{ //-> all pages (optional, configurable)
+pages: [{ //-> all pages
   title: page.title,
   slug: page.slug,
   date: page.date,
@@ -33,12 +33,13 @@ pages: [{ //-> all pages (optional, configurable)
   comments: page.comments,
   permalink: page.permalink,
   path: page.path,
-  excerpt: page.excerpt //-> only text ;-)
-  text: page.content, //-> only text minified ;-)
-  raw: page.raw, //-> original MD (optional, configurable)
-  content: page.content //-> final HTML (optional, configurable)
+  excerpt: page.excerpt, //-> only text :wink:
+  keywords: null //-> it needs settings
+  text: page.content, //-> only text minified :wink:
+  raw: page.raw, //-> original MD content
+  content: page.content //-> final HTML content
 }],
-posts: [{ //-> only published posts (optional, configurable)
+posts: [{ //-> only published posts
 	title: post.title,
   slug: post.slug,
   date: post.date,
@@ -46,10 +47,11 @@ posts: [{ //-> only published posts (optional, configurable)
   comments: post.comments,
   permalink: post.permalink,
   path: post.path,
-  excerpt: post.excerpt, //-> only text ;-)
-  text: post.content, //-> only text minified ;-)
-  raw: post.raw, //-> original MD (optional, configurable)
-  content: post.content, //-> final HTML (optional, configurable)
+  excerpt: post.excerpt, //-> only text :wink:
+  keywords: null //-> it needs settings
+  text: post.content, //-> only text minified :wink:
+  raw: post.raw, //-> original MD content
+  content: post.content, //-> final HTML content
   categories: [{
     name: category.name,
     slug: category.slug,
@@ -72,9 +74,8 @@ Default options are as follows:
 ```yaml
 jsonContent:
   meta: true
+  keywords: false # or *keyword-extractor language options
   pages:
-    raw: false
-    content: false
     title: true
     slug: true
     date: true
@@ -84,11 +85,11 @@ jsonContent:
     link: true
     permalink: true
     excerpt: true
+    keywords: true # it needs root keywords option language
     text: true
-    stopwords: true
+    raw: false
+    content: false
   posts:
-    raw: false
-    content: false
     title: true
     slug: true
     date: true
@@ -98,27 +99,31 @@ jsonContent:
     link: true
     permalink: true
     excerpt: true
+    keywords: true # it needs root keywords option language
     text: true
+    raw: false
+    content: false
     categories: true
     tags: true
-    stopwords: true
 ```
 
-The `raw` option includes original MARKDOWN string and `content` option includes final HTML string.
+You can exclude meta, pages or posts contents from `content.json` by setting `meta`, `pages`, or `posts` to `false`.
 
-You can also exclude meta, pages, or posts contents from `content.json` by setting `meta`, `pages`, or `posts` to `false`.
-
-`meta` enables or disables including the `meta` section of the json
-`pages` enables or disables including the `pages` section of the json
-`posts` enables or disables including the `posts` section of the json
+`meta` enables or disables including the `meta` section of the json.
+`pages` enables or disables including the `pages` section of the json.
+`posts` enables or disables including the `posts` section of the json.
 
 To exclude individual fields from output, set their config values to `false`.
 
+`keywords` options use [https://github.com/michaeldelorenzo/keyword-extractor](michaeldelorenzo/keyword-extractor) that is a NPM package for creating a keyword array from a string and excluding stop words.
+
+If **keyword-extractor** don't supports your language, don't worry! It's disbled by default.
+
 ## Output Formats
 
-By default, the json output will include the `meta`, `pages`, and `posts` sections. If only 1 section is enabled by config, the json output will consist of a single array.
+By default, the json output includes `meta`, `pages` and `posts` sections. If only one section is enabled by config, the json output will consist of a single array.
 
-For example, the following config enables only `posts`, showing the title, date, path, and text fields:
+For example, the following config enables only `posts`, showing title, date, path, and text fields:
 
 ```yaml
 jsonContent:
@@ -139,23 +144,18 @@ jsonContent:
     excerpt: false
     categories: false
     tags: false
-    stopwords: false
 ```
 
-The result content.json will include the following format:
+The result `content.json` will follow this format:
 
 ```javascript
-[{ //-> only published posts (optional, configurable)
+[{ //-> only published posts
   title: post.title,
   date: post.date,
-  text: post.content, //-> text will consist of keywords only, with stopwords removed
+  text: post.content, //-> only text minified :wink:
   path: post.path
 }]
 ```
-
-## Excluding stopwords
-
-Stopwords can be excluded from the `text` and `excerpt` fields by setting the config value for `stopwords` to `false`. In this case, the text will be stripped down to space-delimited keywords.
 
 ## Examples of use
 

@@ -1,9 +1,11 @@
-var keyword_extractor = require("keyword-extractor");
+var keywords = require("keyword-extractor");
 
 hexo.extend.generator.register(hexo_generator_json_content);
 
 function hexo_generator_json_content(site) {
-    var stripe = function (str) {
+    var cfg = hexo.config.hasOwnProperty('jsonContent') ? hexo.config.jsonContent : { meta: true },
+    
+    stripe = function (str) {
       return str.replace(/(<([^>]+)>)/ig, '');
     },
 
@@ -12,18 +14,15 @@ function hexo_generator_json_content(site) {
     },
 
     getKeywords = function (str) {
-      keywords = keyword_extractor.extract(str, {
-        language: "english",
+      return keywords.extract(str, {
+        language: cfg.keywords,
         remove_digits: true,
         return_changed_case: true,
         remove_duplicates: true
-      });
-
-      return keywords.join(' ');
+      }).join(' ');
     },
 
-    cfg = hexo.config.hasOwnProperty('jsonContent') ? hexo.config.jsonContent : { meta: true },
-    pages = cfg.hasOwnProperty('pages') ? cfg.pages : { 
+    pages = cfg.hasOwnProperty('pages') ? cfg.pages : {
       raw: false,
       content: false,
       title: true,
@@ -38,7 +37,8 @@ function hexo_generator_json_content(site) {
       text: true,
       stopwords: true
     },
-    posts = cfg.hasOwnProperty('posts') ? cfg.posts : { 
+    
+    posts = cfg.hasOwnProperty('posts') ? cfg.posts : {
       raw: false, 
       content: false,
       title: true,
@@ -55,6 +55,7 @@ function hexo_generator_json_content(site) {
       tags: true,
       stopwords: true
     },
+    
     json = cfg.meta ? {
       meta: {
         title: hexo.config.title,
@@ -63,10 +64,11 @@ function hexo_generator_json_content(site) {
         author: hexo.config.author,
         url: hexo.config.url,
       }
-    } : {};
+    } : {},
+    content;
   
   if (pages) {
-    var content = site.pages.map(function (page) {
+    content = site.pages.map(function (page) {
       return {
         title: pages.title ? page.title : null,
         slug: pages.slug ? page.slug : null,
@@ -76,23 +78,22 @@ function hexo_generator_json_content(site) {
         path: pages.path ? page.path : null,
         link: pages.link ? page.link : null,
         permalink: pages.permalink ? page.permalink : null,
-        excerpt: pages.excerpt ? (!pages.stopwords ? getKeywords(stripe(page.excerpt)) : stripe(page.excerpt)) : null,
-        text: pages.text ? (!pages.stopwords ? getKeywords(stripe(page.content)) : minify(stripe(page.content))) : null,
+        excerpt: pages.excerpt ? stripe(page.excerpt) : null,
+        keywords: cfg.keywords && pages.keywords ? getKeywords(stripe(page.excerpt)) : null,
+        text: pages.text ? minify(stripe(page.content)) : null,
         raw: pages.raw ? page.raw : null,
         content: pages.content ? page.content : null
       };
     });
 
-    if (posts || cfg.meta) {
+    if (posts || cfg.meta)
         json.pages = content;
-    }
-    else {
+    else 
         json = content;
-    }
   }
   
   if (posts) {
-    var content = site.posts.sort('-date').filter(function (post) {
+    content = site.posts.sort('-date').filter(function (post) {
       return post.published;
     }).map(function (post) {
       return {
@@ -104,8 +105,9 @@ function hexo_generator_json_content(site) {
         path: posts.path ? post.path : null,
         link: posts.link ? post.link : null,
         permalink: posts.permalink ? post.permalink : null,
-        excerpt: posts.excerpt ? (!posts.stopwords ? getKeywords(stripe(post.excerpt)) : stripe(post.excerpt)) : null,
-        text: posts.text ? (!posts.stopwords ? getKeywords(stripe(post.content)) : minify(stripe(post.content))) : null,
+        excerpt: posts.excerpt ? stripe(post.excerpt) : null,
+        keywords: cfg.keywords && posts.keywords ? getKeywords(stripe(post.excerpt)) : null,
+        text: posts.text ? minify(stripe(post.content)) : null,
         raw: posts.raw ? post.raw : null,
         content: posts.content ? post.content : null,
         categories: posts.categories ? post.categories.map(function (cat) {
@@ -125,12 +127,10 @@ function hexo_generator_json_content(site) {
       };
     });
 
-    if (pages || cfg.meta) {
+    if (pages || cfg.meta)
         json.posts = content;
-    }
-    else {
+    else
         json = content;
-    }
   }
   
   return {
