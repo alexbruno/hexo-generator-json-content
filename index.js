@@ -1,6 +1,6 @@
 var keywords = require("keyword-extractor");
 
-hexo.extend.generator.register(hexo_generator_json_content);
+hexo.extend.generator.register('json-content', hexo_generator_json_content);
 
 function hexo_generator_json_content(site) {
     var cfg = hexo.config.hasOwnProperty('jsonContent') ? hexo.config.jsonContent : { meta: true },
