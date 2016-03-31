@@ -33,9 +33,9 @@ pages: [{ //-> all pages
   comments: page.comments,
   permalink: page.permalink,
   path: page.path,
-  excerpt: page.excerpt, //-> only text :wink:
+  excerpt: page.excerpt, //-> only text ;)
   keywords: null //-> it needs settings
-  text: page.content, //-> only text minified :wink:
+  text: page.content, //-> only text minified ;)
   raw: page.raw, //-> original MD content
   content: page.content //-> final HTML content
 }],
@@ -47,9 +47,9 @@ posts: [{ //-> only published posts
   comments: post.comments,
   permalink: post.permalink,
   path: post.path,
-  excerpt: post.excerpt, //-> only text :wink:
+  excerpt: post.excerpt, //-> only text ;)
   keywords: null //-> it needs settings
-  text: post.content, //-> only text minified :wink:
+  text: post.content, //-> only text minified ;)
   raw: post.raw, //-> original MD content
   content: post.content, //-> final HTML content
   categories: [{
@@ -152,7 +152,7 @@ The result `content.json` will follow this format:
 [{ //-> only published posts
   title: post.title,
   date: post.date,
-  text: post.content, //-> only text minified :wink:
+  text: post.content, //-> only text minified ;)
   path: post.path
 }]
 ```
