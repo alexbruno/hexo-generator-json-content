@@ -1,4 +1,4 @@
-var strip = require('striptags'), keywords = require('keyword-extractor');
+var keywords = require('keyword-extractor');
 
 hexo.extend.generator.register('json-content', hexo_generator_json_content);
 
@@ -6,7 +6,7 @@ function hexo_generator_json_content(site) {
     var cfg = hexo.config.hasOwnProperty('jsonContent') ? hexo.config.jsonContent : { meta: true },
 
     minify = function (str) {
-      return strip(str).trim().replace(/\n/g, ' ').replace(/\s+/g, ' ');
+      return hexo.util.stripHTML(str).trim().replace(/\n/g, ' ').replace(/\s+/g, ' ');
     },
 
     getKeywords = function (str) {

@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/alexbruno/hexo-generator-json-content",
   "dependencies": {
-		"striptags": "latest",
+		"hexo-util": "latest",
     "keyword-extractor": "latest"
   }
 }

@@ -65,7 +65,7 @@ posts: [{ //-> only published posts
 }]
 ```
 
-[ericnorris/striptags](https://github.com/ericnorris/striptags) is used to get only clean text for `excerpt` and `text` fields.
+`hexo.util.stripHTML` is used to get only clean text for `excerpt` and `text` fields.
 
 ## Configuration
 
