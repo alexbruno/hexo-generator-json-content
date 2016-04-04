@@ -15,7 +15,7 @@ npm i -S hexo-generator-json-content
 Hexo will run the generator *automagically* when you run `hexo serve` or `hexo generate`.
 :smirk:
 
-Using the default settings, the `content.json` file will have the following structure:
+Using the default settings, the `content.json` file looks like the following structure:
 
 ```javascript
 meta: {
@@ -65,16 +65,18 @@ posts: [{ //-> only published posts
 }]
 ```
 
+[ericnorris/striptags](https://github.com/ericnorris/striptags) is used to get only clean text for `excerpt` and `text` fields.
+
 ## Configuration
 
-You can configure some options in `_config.yml` to generate `content.json`.
+You can set some options in `_config.yml` to generate a custom `content.json`.
 
 Default options are as follows:
 
 ```yaml
 jsonContent:
   meta: true
-  keywords: false # or *keyword-extractor language options
+  keywords: false # (english, spanish, polish, german, french, italian, dutch, russian, portuguese, swedish)
   pages:
     title: true
     slug: true
@@ -85,7 +87,7 @@ jsonContent:
     link: true
     permalink: true
     excerpt: true
-    keywords: true # it needs root keywords option language
+    keywords: true # but only if root keywords option language was set
     text: true
     raw: false
     content: false
@@ -99,7 +101,7 @@ jsonContent:
     link: true
     permalink: true
     excerpt: true
-    keywords: true # it needs root keywords option language
+    keywords: true # but only if root keywords option language was set
     text: true
     raw: false
     content: false
@@ -109,13 +111,9 @@ jsonContent:
 
 You can exclude meta, pages or posts contents from `content.json` by setting `meta`, `pages`, or `posts` to `false`.
 
-`meta` enables or disables including the `meta` section of the json.
-`pages` enables or disables including the `pages` section of the json.
-`posts` enables or disables including the `posts` section of the json.
+To exclude individual fields from `pages` or `posts` output set their config values to `false`.
 
-To exclude individual fields from output, set their config values to `false`.
-
-`keywords` options use [https://github.com/michaeldelorenzo/keyword-extractor](michaeldelorenzo/keyword-extractor) that is a NPM package for creating a keyword array from a string and excluding stop words.
+`keywords` options uses [michaeldelorenzo/keyword-extractor](https://github.com/michaeldelorenzo/keyword-extractor) that is a NPM package for creating a keyword array from a string by removing stopwords.
 
 If **keyword-extractor** don't supports your language, don't worry! It's disbled by default.
 
@@ -146,7 +144,7 @@ jsonContent:
     tags: false
 ```
 
-The result `content.json` will follow this format:
+The result `content.json` will look like this:
 
 ```javascript
 [{ //-> only published posts

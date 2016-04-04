@@ -1,16 +1,12 @@
-var keywords = require("keyword-extractor");
+var strip = require('striptags'), keywords = require('keyword-extractor');
 
 hexo.extend.generator.register('json-content', hexo_generator_json_content);
 
 function hexo_generator_json_content(site) {
     var cfg = hexo.config.hasOwnProperty('jsonContent') ? hexo.config.jsonContent : { meta: true },
 
-    stripe = function (str) {
-      return str.replace(/(<([^>]+)>)/g, '');
-    },
-
     minify = function (str) {
-      return stripe(str).trim().replace(/\n/g, ' ').replace(/\s+/g, ' ');
+      return strip(str).trim().replace(/\n/g, ' ').replace(/\s+/g, ' ');
     },
 
     getKeywords = function (str) {
