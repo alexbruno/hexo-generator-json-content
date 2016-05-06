@@ -63,23 +63,28 @@ function hexo_generator_json_content(site) {
     } : {},
     content;
 
+  var pagesPropertyNames = Object.getOwnPropertyNames(pages).filter(function (item) {
+    return pages[item];
+  });
+  var postsPropertyNames = Object.getOwnPropertyNames(posts).filter(function (item) {
+    return posts[item];
+  });
+
   if (pages) {
     content = site.pages.map(function (page) {
-      return {
-        title: pages.title ? page.title : null,
-        slug: pages.slug ? page.slug : null,
-        date: pages.date ? page.date : null,
-        updated: pages.updated ? page.updated : null,
-        comments: pages.comments ? page.comments : null,
-        path: pages.path ? page.path : null,
-        link: pages.link ? page.link : null,
-        permalink: pages.permalink ? page.permalink : null,
-        excerpt: pages.excerpt ? minify(page.excerpt) : null,
-        keywords: cfg.keywords && pages.keywords ? getKeywords(minify(page.excerpt)) : null,
-        text: pages.text ? minify(page.content) : null,
-        raw: pages.raw ? page.raw : null,
-        content: pages.content ? page.content : null
-      };
+      var actualPage = {};
+      pagesPropertyNames.forEach(function(item){
+        if (item === 'excerpt') {
+          actualPage[item] = minify(page.excerpt);
+        } else if (item === 'text') {
+          actualPage[item] = minify(page.content);
+        } else if (item === 'keywords' && cfg.keywords) {
+          actualPage[item] = getKeywords(minify(page.excerpt));
+        } else {
+          actualPage[item] = page[item];
+        }
+      });
+      return actualPage;
     });
 
     if (posts || cfg.meta)
@@ -92,35 +97,35 @@ function hexo_generator_json_content(site) {
     content = site.posts.sort('-date').filter(function (post) {
       return post.published;
     }).map(function (post) {
-      return {
-        title: posts.title ? post.title : null,
-        slug: posts.slug ? post.slug : null,
-        date: posts.date ? post.date : null,
-        updated: posts.updated ? post.updated : null,
-        comments: posts.comments ? post.comments : null,
-        path: posts.path ? post.path : null,
-        link: posts.link ? post.link : null,
-        permalink: posts.permalink ? post.permalink : null,
-        excerpt: posts.excerpt ? minify(post.excerpt) : null,
-        keywords: cfg.keywords && posts.keywords ? getKeywords(minify(post.excerpt)) : null,
-        text: posts.text ? minify(post.content) : null,
-        raw: posts.raw ? post.raw : null,
-        content: posts.content ? post.content : null,
-        categories: posts.categories ? post.categories.map(function (cat) {
-          return {
-            name: cat.name,
-            slug: cat.slug,
-            permalink: cat.permalink
-          };
-        }) : null,
-        tags: posts.tags ? post.tags.map(function (tag) {
-          return {
-            name: tag.name,
-            slug: tag.slug,
-            permalink: tag.permalink
-          };
-        }) : null
-      };
+      var actualPost = {};
+      postsPropertyNames.forEach(function(item){
+        if (item === 'excerpt') {
+          actualPost[item] = minify(post.excerpt);
+        } else if (item === 'text') {
+          actualPost[item] = minify(post.content);
+        } else if (item === 'categories') {
+          actualPost[item] = post.categories.map(function (cat) {
+            return {
+              name: cat.name,
+              slug: cat.slug,
+              permalink: cat.permalink
+            };
+          });
+        } else if (item === 'tags') {
+          actualPost[item] = post.tags.map(function (tag) {
+            return {
+              name: tag.name,
+              slug: tag.slug,
+              permalink: tag.permalink
+            };
+          });
+        } else if (item === 'keywords' && cfg.keywords) {
+          actualPost[item] = getKeywords(minify(post.excerpt));
+        } else {
+          actualPost[item] = post[item];
+        }
+      });
+      return actualPost;
     });
 
     if (pages || cfg.meta)
