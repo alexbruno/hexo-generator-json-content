@@ -63,14 +63,10 @@ function hexo_generator_json_content(site) {
     } : {},
     content;
 
-  var pagesPropertyNames = Object.getOwnPropertyNames(pages).filter(function (item) {
-    return pages[item];
-  });
-  var postsPropertyNames = Object.getOwnPropertyNames(posts).filter(function (item) {
-    return posts[item];
-  });
-
   if (pages) {
+    var pagesPropertyNames = Object.getOwnPropertyNames(pages).filter(function (item) {
+      return pages[item];
+    });
     content = site.pages.map(function (page) {
       var actualPage = {};
       pagesPropertyNames.forEach(function(item){
@@ -94,6 +90,9 @@ function hexo_generator_json_content(site) {
   }
 
   if (posts) {
+    var postsPropertyNames = Object.getOwnPropertyNames(posts).filter(function (item) {
+      return posts[item];
+    });
     content = site.posts.sort('-date').filter(function (post) {
       return post.published;
     }).map(function (post) {
