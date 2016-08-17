@@ -128,7 +128,7 @@ jsonContent:
 
 If **keyword-extractor** don't supports your language, don't worry! It's disabled by default.
 
-## Output Formats
+## Output
 
 By default, the json output includes `meta`, `pages` and `posts` sections. If only one section is enabled by config, the json output will consist of a single array.
 
@@ -165,10 +165,6 @@ The result `content.json` will look like this:
   path: post.path
 }]
 ```
-
-## Examples of use
-
-Coming soon... itle, date: post.date, text: post.content, //-> only text minified ;) path: post.path }] ```
 
 ## Usage examples
 
