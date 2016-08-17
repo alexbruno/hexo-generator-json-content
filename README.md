@@ -1,6 +1,6 @@
 # hexo-generator-json-content
 
-Hexo (https://hexo.io/) plugin to generate a JSON file for generic use or consumption with the contents of posts and pages.
+Hexo (<https://hexo.io/>) plugin to generate a JSON file for generic use or consumption with the contents of posts and pages.
 
 It's useful to serve compact and agile content data for microservices like AJAX site search, Twitter typeahead or public API.
 
@@ -12,56 +12,55 @@ npm i -S hexo-generator-json-content
 
 ## Usage
 
-Hexo will run the generator *automagically* when you run `hexo serve` or `hexo generate`.
-:smirk:
+Hexo will run the generator _automagically_ when you run `hexo serve` or `hexo generate`. :smirk:
 
 Using the default settings, the `content.json` file looks like the following structure:
 
 ```javascript
 meta: {
-	title: hexo.config.title,
-	subtitle: hexo.config.subtitle,
-	description: hexo.config.description,
-	author: hexo.config.author,
-	url: hexo.config.url
+    title: hexo.config.title,
+    subtitle: hexo.config.subtitle,
+    description: hexo.config.description,
+    author: hexo.config.author,
+    url: hexo.config.url
 },
 pages: [{ //-> all pages
-  title: page.title,
-  slug: page.slug,
-  date: page.date,
-  updated: page.updated,
-  comments: page.comments,
-  permalink: page.permalink,
-  path: page.path,
-  excerpt: page.excerpt, //-> only text ;)
-  keywords: null //-> it needs settings
-  text: page.content, //-> only text minified ;)
-  raw: page.raw, //-> original MD content
-  content: page.content //-> final HTML content
+    title: page.title,
+    slug: page.slug,
+    date: page.date,
+    updated: page.updated,
+    comments: page.comments,
+    permalink: page.permalink,
+    path: page.path,
+    excerpt: page.excerpt, //-> only text ;)
+    keywords: null //-> it needs settings
+    text: page.content, //-> only text minified ;)
+    raw: page.raw, //-> original MD content
+    content: page.content //-> final HTML content
 }],
 posts: [{ //-> only published posts
-	title: post.title,
-  slug: post.slug,
-  date: post.date,
-  updated: post.updated,
-  comments: post.comments,
-  permalink: post.permalink,
-  path: post.path,
-  excerpt: post.excerpt, //-> only text ;)
-  keywords: null //-> it needs settings
-  text: post.content, //-> only text minified ;)
-  raw: post.raw, //-> original MD content
-  content: post.content, //-> final HTML content
-  categories: [{
-    name: category.name,
-    slug: category.slug,
-    permalink: category.permalink
-  }],
-  tags: [{
-    name: tag.name,
-    slug: tag.slug,
-    permalink: tag.permalink
-  }]
+    title: post.title,
+    slug: post.slug,
+    date: post.date,
+    updated: post.updated,
+    comments: post.comments,
+    permalink: post.permalink,
+    path: post.path,
+    excerpt: post.excerpt, //-> only text ;)
+    keywords: null //-> it needs settings
+    text: post.content, //-> only text minified ;)
+    raw: post.raw, //-> original MD content
+    content: post.content, //-> final HTML content
+    categories: [{
+        name: category.name,
+        slug: category.slug,
+        permalink: category.permalink
+    }],
+    tags: [{
+        name: tag.name,
+        slug: tag.slug,
+        permalink: tag.permalink
+    }]
 }]
 ```
 
@@ -113,18 +112,21 @@ You can exclude meta, pages or posts contents from `content.json` by setting `me
 
 To exclude individual fields from `pages` or `posts` output set their config values to `false`.
 
-To exclude specific files, use an `ignore` list. Any filepath that contains the substring will be skipped from indexing. For example:
+To exclude specific paths, use an `ignore` list. Any path that contains at least one of the listed substrings will be skipped from indexing. For example:
 
 ```yaml
 jsonContent:
   ignore:
-    - .css
-    - .js
+    - path/to/a/page
+    - url/to/one/post
+    - an-entire-category
+    - lorem-ipsum.file # a specific file
+    - .ext # a file extension
 ```
 
-`keywords` options uses [michaeldelorenzo/keyword-extractor](https://github.com/michaeldelorenzo/keyword-extractor) that is a NPM package for creating a keyword array from a string by removing stopwords.
+`keywords` options use [michaeldelorenzo/keyword-extractor](https://github.com/michaeldelorenzo/keyword-extractor) that is a NPM package for creating a keywords array from a string by removing stopwords.
 
-If **keyword-extractor** don't supports your language, don't worry! It's disbled by default.
+If **keyword-extractor** don't supports your language, don't worry! It's disabled by default.
 
 ## Output Formats
 
@@ -165,5 +167,9 @@ The result `content.json` will look like this:
 ```
 
 ## Examples of use
+
+Coming soon... itle, date: post.date, text: post.content, //-> only text minified ;) path: post.path }] ```
+
+## Usage examples
 
 Coming soon...
