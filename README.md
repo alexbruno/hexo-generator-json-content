@@ -113,6 +113,15 @@ You can exclude meta, pages or posts contents from `content.json` by setting `me
 
 To exclude individual fields from `pages` or `posts` output set their config values to `false`.
 
+To exclude specific files, use an `ignore` list. Any filepath that contains the substring will be skipped from indexing. For example:
+
+```yaml
+jsonContent:
+  ignore:
+    - .css
+    - .js
+```
+
 `keywords` options uses [michaeldelorenzo/keyword-extractor](https://github.com/michaeldelorenzo/keyword-extractor) that is a NPM package for creating a keyword array from a string by removing stopwords.
 
 If **keyword-extractor** don't supports your language, don't worry! It's disbled by default.

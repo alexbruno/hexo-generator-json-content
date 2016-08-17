@@ -73,7 +73,20 @@ function hexo_generator_json_content(site) {
         if (item === 'excerpt') {
           actualPage[item] = minify(page.excerpt);
         } else if (item === 'text') {
-          actualPage[item] = minify(page.content);
+          var skip = false;
+          var path = page.path.toUpperCase();
+
+          for (var i in cfg.ignore) {
+            ext = cfg.ignore[i].toUpperCase();
+            if (path.indexOf(ext) != -1) {
+              skip = true;
+              break;
+            }
+          }
+
+          if (!skip) {
+            actualPage[item] = minify(page.content);
+          }
         } else if (item === 'keywords' && cfg.keywords) {
           actualPage[item] = getKeywords(minify(page.excerpt));
         } else {
