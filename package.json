@@ -25,6 +25,7 @@
   "homepage": "https://github.com/alexbruno/hexo-generator-json-content",
   "dependencies": {
     "hexo-util": "latest",
-    "keyword-extractor": "latest"
+    "keyword-extractor": "latest",
+    "moment": "latest"
   }
 }

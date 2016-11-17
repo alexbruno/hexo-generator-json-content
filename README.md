@@ -75,7 +75,8 @@ Default options are as follows:
 ```yaml
 jsonContent:
   meta: true
-  keywords: false # (english, spanish, polish, german, french, italian, dutch, russian, portuguese, swedish)
+  keywords: false # language name option
+  dateFormat: undefined # format string
   pages:
     title: true
     slug: true
@@ -108,6 +109,21 @@ jsonContent:
     tags: true
 ```
 
+### Date formats
+
+`dateFormat` option sets an output format for datetime objects `date` and `updated`.
+
+It uses [moment](https://github.com/moment/moment/) to do the trick, so any string accepted by [format](http://momentjs.com/docs/#/displaying/format/) method can be used.
+
+If not defined, default format is the `JSON.stringify` result for `Date` objects.
+
+
+### Keywords
+
+`keywords` options extracts keywords from excerpt using [michaeldelorenzo/keyword-extractor](https://github.com/michaeldelorenzo/keyword-extractor), NPM package to create a keywords array from a string by removing stopwords.
+
+If **keyword-extractor** don't supports your language, don't worry! It's disabled by default.
+
 You can exclude meta, pages or posts contents from `content.json` by setting `meta`, `pages`, or `posts` to `false`.
 
 To exclude individual fields from `pages` or `posts` output set their config values to `false`.
@@ -120,13 +136,9 @@ jsonContent:
     - path/to/a/page
     - url/to/one/post
     - an-entire-category
-    - lorem-ipsum.file # a specific file
+    - specific.file
     - .ext # a file extension
 ```
-
-`keywords` options use [michaeldelorenzo/keyword-extractor](https://github.com/michaeldelorenzo/keyword-extractor) that is a NPM package for creating a keywords array from a string by removing stopwords.
-
-If **keyword-extractor** don't supports your language, don't worry! It's disabled by default.
 
 ## Output
 

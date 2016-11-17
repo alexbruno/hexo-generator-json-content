@@ -1,169 +1,137 @@
-var util = require('hexo-util'),
-	keywords = require('keyword-extractor');
+const util = require('hexo-util'),
+	moment = require('moment'),
+	keywords = require('keyword-extractor'),
+	minify = str => util.stripHTML(str).trim().replace(/\n/g, ' ').replace(/\s+/g, ' '),
+	getProps = ref => Object.getOwnPropertyNames(ref).filter(item => ref[item]),
+	catags = item => {
+		return {
+			name: item.name,
+			slug: item.slug,
+			permalink: item.permalink
+		}
+	}
 
-hexo.extend.generator.register('json-content', hexo_generator_json_content);
+let cfg = hexo.config.jsonContent || { meta: true },
+	pages = cfg.hasOwnProperty('pages') ? cfg.pages : {
+		raw: false,
+		content: false,
+		title: true,
+		slug: true,
+		date: true,
+		updated: true,
+		comments: true,
+		path: true,
+		link: true,
+		permalink: true,
+		excerpt: true,
+		text: true,
+		keywords: true
+	},
+	posts = cfg.hasOwnProperty('posts') ? cfg.posts : {
+		raw: false,
+		content: false,
+		title: true,
+		slug: true,
+		date: true,
+		updated: true,
+		comments: true,
+		path: true,
+		link: true,
+		permalink: true,
+		excerpt: true,
+		text: true,
+		categories: true,
+		tags: true,
+		keywords: true
+	},
+	json = cfg.meta ? {
+		meta: {
+			title: hexo.config.title,
+			subtitle: hexo.config.subtitle,
+			description: hexo.config.description,
+			author: hexo.config.author,
+			url: hexo.config.url,
+		}
+	} : {},
+	ignore = cfg.ignore ? cfg.ignore.map(item => item.toLowerCase()) : [],
+	getKeywords = str => {
+		return keywords.extract(str, {
+			language: cfg.keywords,
+			remove_digits: true,
+			return_changed_case: true,
+			remove_duplicates: true
+		}).join(' ')
+	},
+	setContent = (obj, item, ref) => {
+		switch (item) {
+			case 'excerpt':
+				obj.excerpt = minify(ref.excerpt)
+				break
 
-function hexo_generator_json_content(site) {
-	var cfg = hexo.config.hasOwnProperty('jsonContent') ? hexo.config.jsonContent : {
-			meta: true
-		},
+			case 'text':
+				obj.content = minify(ref.content)
+				break
 
-		ignore = cfg.ignore ? cfg.ignore.map(function(item) {
-			return item.toLowerCase();
-		}) : [],
+			case 'keywords':
+				if (cfg.keywords)
+					obj.keywords = getKeywords(minify(ref.excerpt))
+				break
 
-		minify = function(str) {
-			return util.stripHTML(str).trim().replace(/\n/g, ' ').replace(/\s+/g, ' ');
-		},
+			case 'categories':
+				obj.categories = ref.categories.map(catags)
+				break
 
-		getKeywords = function(str) {
-			return keywords.extract(str, {
-				language: cfg.keywords,
-				remove_digits: true,
-				return_changed_case: true,
-				remove_duplicates: true
-			}).join(' ');
-		},
+			case 'tags':
+				obj.tags = ref.tags.map(catags)
+				break
 
-		pages = cfg.hasOwnProperty('pages') ? cfg.pages : {
-			raw: false,
-			content: false,
-			title: true,
-			slug: true,
-			date: true,
-			updated: true,
-			comments: true,
-			path: true,
-			link: true,
-			permalink: true,
-			excerpt: true,
-			text: true,
-			keywords: true
-		},
+			case 'date':
+				obj.date = cfg.dateFormat ?
+					moment(ref.date).format(cfg.dateFormat) :
+					ref.date
+				break
 
-		posts = cfg.hasOwnProperty('posts') ? cfg.posts : {
-			raw: false,
-			content: false,
-			title: true,
-			slug: true,
-			date: true,
-			updated: true,
-			comments: true,
-			path: true,
-			link: true,
-			permalink: true,
-			excerpt: true,
-			text: true,
-			categories: true,
-			tags: true,
-			keywords: true
-		},
+			case 'updated':
+				obj.updated = cfg.dateFormat ?
+					moment(ref.updated).format(cfg.dateFormat) :
+					ref.updated
+				break
 
-		json = cfg.meta ? {
-			meta: {
-				title: hexo.config.title,
-				subtitle: hexo.config.subtitle,
-				description: hexo.config.description,
-				author: hexo.config.author,
-				url: hexo.config.url,
-			}
-		} : {};
+			default:
+				obj[item] = ref[item]
+		}
+		return obj
+	}
 
+hexo.extend.generator.register('json-content', site => {
 	if (pages) {
-		var pagesPropertyNames = Object.getOwnPropertyNames(pages).filter(function(item) {
-				return pages[item];
-			}),
-			pagesContent = site.pages.filter(function(page) {
-				var path = page.path.toLowerCase(),
-					igno = ignore.find(function(item) {
-						return path.includes(item);
-					});
-				return !igno;
-			}).map(function(page) {
-				var actualPage = {};
-
-				pagesPropertyNames.forEach(function(item) {
-					switch (item) {
-						case 'excerpt':
-							return actualPage[item] = minify(page.excerpt);
-
-						case 'text':
-							return actualPage[item] = minify(page.content);
-
-						case 'keywords':
-							if (cfg.keywords)
-								return actualPage[item] = getKeywords(minify(page.excerpt));
-
-						default:
-							return actualPage[item] = page[item];
-					}
-				});
-
-				return actualPage;
-			});
+		let pagesNames = getProps(pages),
+			pagesContent = site.pages.filter(page => {
+				let path = page.path.toLowerCase()
+				return !ignore.find(item => path.includes(item))
+			}).map(page => pagesNames.reduce((obj, item) => setContent(obj, item, page), {}))
 
 		if (posts || cfg.meta)
-			json.pages = pagesContent;
+			json.pages = pagesContent
 		else
-			json = pagesContent;
+			json = pagesContent
 	}
 
 	if (posts) {
-		var postsPropertyNames = Object.getOwnPropertyNames(posts).filter(function(item) {
-				return posts[item];
-			}),
-			catags = function(item) {
-				return {
-					name: item.name,
-					slug: item.slug,
-					permalink: item.permalink
-				};
-			},
-			postsContent = site.posts.sort('-date').filter(function(post) {
-				return post.published;
-			}).filter(function(post) {
-				var path = post.path.toLowerCase(),
-					igno = ignore.find(function(item) {
-						return path.includes(item);
-					});
-				return !igno;
-			}).map(function(post) {
-				var actualPost = {};
-
-				postsPropertyNames.forEach(function(item) {
-					switch (item) {
-						case 'excerpt':
-							return actualPost[item] = minify(post.excerpt);
-
-						case 'text':
-							return actualPost[item] = minify(post.content);
-
-						case 'keywords':
-							if (cfg.keywords)
-								return actualPost[item] = getKeywords(minify(post.excerpt));
-
-						case 'categories':
-							return actualPost[item] = post.categories.map(catags);
-
-						case 'tags':
-							return actualPost[item] = post.tags.map(catags);
-
-						default:
-							return actualPost[item] = post[item];
-					}
-				});
-
-				return actualPost;
-			});
+		let postsNames = getProps(posts),
+			postsContent = site.posts.sort('-date').filter(post => {
+				let path = post.path.toLowerCase()
+				return post.published && !ignore.find(item => path.includes(item))
+			}).map(post => postsNames.reduce((obj, item) => setContent(obj, item, post), {}))
 
 		if (pages || cfg.meta)
-			json.posts = postsContent;
+			json.posts = postsContent
 		else
-			json = postsContent;
+			json = postsContent
 	}
 
 	return {
 		path: 'content.json',
 		data: JSON.stringify(json)
-	};
-}
+	}
+})
