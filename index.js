@@ -69,7 +69,7 @@ let cfg = hexo.config.jsonContent || { meta: true },
 				break
 
 			case 'text':
-				obj.content = minify(ref.content)
+				obj.text = minify(ref.content)
 				break
 
 			case 'keywords':
