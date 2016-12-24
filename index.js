@@ -51,6 +51,7 @@ let cfg = hexo.config.jsonContent || { meta: true },
 			description: hexo.config.description,
 			author: hexo.config.author,
 			url: hexo.config.url,
+			root: hexo.config.root
 		}
 	} : {},
 	ignore = cfg.ignore ? cfg.ignore.map(item => item.toLowerCase()) : [],
