@@ -122,7 +122,7 @@ hexo.extend.generator.register('json-content', site => {
 		let postsNames = getProps(posts),
 			postsContent = site.posts.sort('-date').filter(post => {
 				let path = post.path.toLowerCase()
-				return post.published && !ignore.find(item => path.includes(item))
+				return !ignore.find(item => path.includes(item))
 			}).map(post => postsNames.reduce((obj, item) => setContent(obj, item, post), {}))
 
 		if (pages || cfg.meta)
