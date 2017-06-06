@@ -1,3 +1,4 @@
+'use strict';
 const util = require('hexo-util'),
 	moment = require('moment'),
 	keywords = require('keyword-extractor'),
