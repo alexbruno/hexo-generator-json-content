@@ -1,6 +1,6 @@
 {
   "name": "hexo-generator-json-content",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "Hexo plugin to generate a JSON file with the contents of posts and pages to generic use or consumption, like AJAX site search, Twitter typehead or public content API",
   "scripts": {
     "clean": "shx rm -rf dist",
