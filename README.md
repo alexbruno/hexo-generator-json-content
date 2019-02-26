@@ -9,15 +9,19 @@ It's useful to serve compact and agile content data for microservices like AJAX 
 It is now possible to:
 
 - Customize the output file name
+- Include drafts on indexed content
 - Skip indexing by tag, besides by category or path
 
 ### Breaking change
 
 `ignore` settings are a bit different now. It expects to receive one or two lists: `paths` and `tags`.
 
+## Table of contents
+
 - [hexo-generator-json-content](#hexo-generator-json-content)
   - [News](#news)
     - [Breaking change](#breaking-change)
+  - [Table of contents](#table-of-contents)
   - [Installation](#installation)
   - [Usage](#usage)
   - [Settings](#settings)
@@ -27,6 +31,7 @@ It is now possible to:
   - [Output](#output)
     - [Sections](#sections)
     - [Excluding fields](#excluding-fields)
+    - [Drafts](#drafts)
     - [Skip indexing](#skip-indexing)
     - [Custom file name](#custom-file-name)
 
@@ -105,6 +110,7 @@ Default settings are:
 ```yaml
 jsonContent:
   meta: true
+  dafts: false
   keywords: false
   dateFormat: undefined
   file: content.json
@@ -208,6 +214,17 @@ The result JSON will look like this:
 You can exclude `meta`, `pages` or `posts` contents from output JSON by setting `meta`, `pages`, or `posts` to `false`.
 
 To exclude individual fields from `pages` or `posts` output, set its config values to `false`.
+
+### Drafts
+
+By default, drafts are automatically skipped from indexing.
+
+If you want to include drafts, set `drafts: true`:
+
+```yaml
+jsonContent:
+  drafts: true
+```
 
 ### Skip indexing
 

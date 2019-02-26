@@ -3,6 +3,7 @@ import { isIgnored, ignoreSettings } from './modules/ignore'
 import { getProps, reduceContent } from './modules/utils'
 
 const { config } = hexo
+
 const json = config.jsonContent || { meta: true }
 
 const pages = json.hasOwnProperty('pages') ? json.pages : defaults.pages
@@ -38,7 +39,10 @@ hexo.extend.generator.register('json-content', site => {
   if (posts) {
     const postsNames = getProps(posts)
     const postsSorted = site.posts.sort('-date')
-    const postsValid = postsSorted.filter(post => post.published && !isIgnored(post, ignore))
+    const postsValid = postsSorted.filter(post => {
+      const include = json.drafts || post.published
+      return include && !isIgnored(post, ignore)
+    })
     const postsContent = postsValid.map(post => reduceContent(postsNames, post, json))
 
     if (pages || json.meta) {

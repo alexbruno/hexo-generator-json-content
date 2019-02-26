@@ -17,8 +17,8 @@ export function isIgnored (content, settings) {
 
   if (pathIgnored) { return true }
 
-  const postTags = content.tags ? content.tags.map(mapTags) : []
-  const tagIgnored = postTags.filter(tag => settings.tags.includes(tag)).length
+  const tags = content.tags ? content.tags.map(mapTags) : []
+  const tagIgnored = tags.filter(tag => settings.tags.includes(tag)).length
 
   if (tagIgnored) { return true }
 
