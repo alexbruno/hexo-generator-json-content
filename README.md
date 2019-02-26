@@ -128,17 +128,23 @@ You can exclude meta, pages or posts contents from `content.json` by setting `me
 
 To exclude individual fields from `pages` or `posts` output set their config values to `false`.
 
-To exclude specific paths, use an `ignore` list. Any path that contains at least one of the listed substrings will be skipped from indexing. For example:
+To exclude specific paths or tags, use an `ignore` list. Any path or tag that contains at least one of the listed substrings will be skipped from indexing. For example:
 
 ```yaml
 jsonContent:
   ignore:
-    - path/to/a/page
-    - url/to/one/post
-    - an-entire-category
-    - specific.file
-    - .ext # a file extension
+    paths:
+      - path/to/a/page
+      - url/to/one/post
+      - an-entire-category
+      - specific.file
+      - .ext # a file extension
+    tags:
+      - tag1
+      - tag2
 ```
+
+Moreover, you can exclude a specific post/page by defining a field `hidden` and setting it to true. Also, you can set `hidden` to false to override all the rules mentioned above.
 
 ## Output
 

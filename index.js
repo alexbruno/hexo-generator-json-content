@@ -12,6 +12,34 @@ const util = require('hexo-util'),
 		}
 	}
 
+function parseIgnoreSettings(config) {
+	var ignore      = config.ignore ? config.ignore : {};
+    ignore.paths    = ignore.paths ? ignore.paths.map(item => item.toLowerCase()) : [];
+    ignore.tags     = ignore.tags ? ignore.tags.map(tag => tag.replace('#','').toLowerCase()): [];
+    return ignore;
+}
+
+function isIgnored(post, ignoreSettings) {
+    // Override all rules when it's explicitely mentioned
+    if(post.hidden != undefined && post.hidden == false)
+        return false;
+
+    if(post.hidden || post.password)
+        return true;
+
+    let path = post.path.toLowerCase()
+    let pathIgnored = ignoreSettings.paths.find(item => path.includes(item))
+    if (pathIgnored)
+        return true;
+
+    let postTags = post.tags ? post.tags.map(item => typeof item === 'object' ? item.name.toLowerCase() : item): [];
+    let tagIgnored = postTags.filter(tag => ignoreSettings.tags.indexOf(tag) != -1).length > 0;
+    if (tagIgnored)
+        return true;
+
+    return false;
+}
+
 let cfg = hexo.config.jsonContent || { meta: true },
 	pages = cfg.hasOwnProperty('pages') ? cfg.pages : {
 		raw: false,
@@ -55,7 +83,7 @@ let cfg = hexo.config.jsonContent || { meta: true },
 			root: hexo.config.root
 		}
 	} : {},
-	ignore = cfg.ignore ? cfg.ignore.map(item => item.toLowerCase()) : [],
+	ignore = parseIgnoreSettings(cfg),
 	getKeywords = str => {
 		return keywords.extract(str, {
 			language: cfg.keywords,
@@ -109,8 +137,7 @@ hexo.extend.generator.register('json-content', site => {
 	if (pages) {
 		let pagesNames = getProps(pages),
 			pagesContent = site.pages.filter(page => {
-				let path = page.path.toLowerCase()
-				return !ignore.find(item => path.includes(item))
+                return !isIgnored(page, ignore);
 			}).map(page => pagesNames.reduce((obj, item) => setContent(obj, item, page), {}))
 
 		if (posts || cfg.meta)
@@ -122,8 +149,7 @@ hexo.extend.generator.register('json-content', site => {
 	if (posts) {
 		let postsNames = getProps(posts),
 			postsContent = site.posts.sort('-date').filter(post => {
-				let path = post.path.toLowerCase()
-				return post.published && !ignore.find(item => path.includes(item))
+				return post.published && !isIgnored(post, ignore);
 			}).map(post => postsNames.reduce((obj, item) => setContent(obj, item, post), {}))
 
 		if (pages || cfg.meta)
