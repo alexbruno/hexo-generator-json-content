@@ -1,0 +1,25 @@
+{
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "standard"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "parser": "babel-eslint"
+  },
+  "plugins": [
+    "import",
+    "standard"
+  ],
+  "root": true,
+  "rules": {
+    "no-console": 0
+  },
+  "globals": {
+    "hexo": true
+  }
+}

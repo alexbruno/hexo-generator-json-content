@@ -2,9 +2,18 @@
   "name": "hexo-generator-json-content",
   "version": "3.0.1",
   "description": "Hexo plugin to generate a JSON file with the contents of posts and pages to generic use or consumption, like AJAX site search, Twitter typehead or public content API",
-  "main": "index.js",
   "scripts": {
-    "test": ""
+    "clean": "shx rm -rf dist",
+    "major": "npm version major && npm run push",
+    "minor": "npm version minor && npm run push",
+    "patch": "npm version patch && npm run push",
+    "prepare": "npm run dist",
+    "push": "git push && git push --tags",
+    "lint": "eslint src --color --fix",
+    "dist": "run-s dist:*",
+    "dist:lint": "npm run lint",
+    "dist:clean": "npm run clean",
+    "dist:build": "rollup -c"
   },
   "repository": {
     "type": "git",
@@ -17,7 +26,7 @@
     "generator",
     "content"
   ],
-  "author": "Alex Bruno Cáceres <webmaster@alexbruno.net.br>",
+  "author": "Alex Bruno Cáceres <git.alexbr@outlook.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/alexbruno/hexo-generator-json-content/issues"
@@ -27,5 +36,27 @@
     "hexo-util": "latest",
     "keyword-extractor": "latest",
     "moment": "latest"
-  }
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.14.1",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "husky": "^1.3.1",
+    "npm-run-all": "^4.1.5",
+    "rollup": "^1.2.3",
+    "rollup-plugin-esmin": "^0.1.3",
+    "shx": "^0.3.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint && git add ."
+    }
+  },
+  "main": "dist/umd.js",
+  "esnext": "dist/module.js",
+  "module": "dist/module.js"
 }

@@ -4,6 +4,32 @@ Hexo (<https://hexo.io/>) plugin to generate a JSON file for generic use or cons
 
 It's useful to serve compact and agile content data for microservices like AJAX site search, Twitter typeahead or public API.
 
+## News
+
+It is now possible to:
+
+- Customize the output file name
+- Skip indexing by tag, besides by category or path
+
+### Breaking change
+
+`ignore` settings are a bit different now. It expects to receive one or two lists: `paths` and `tags`.
+
+- [hexo-generator-json-content](#hexo-generator-json-content)
+  - [News](#news)
+    - [Breaking change](#breaking-change)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Settings](#settings)
+    - [Defaults](#defaults)
+    - [Keywords](#keywords)
+    - [Date formats](#date-formats)
+  - [Output](#output)
+    - [Sections](#sections)
+    - [Excluding fields](#excluding-fields)
+    - [Skip indexing](#skip-indexing)
+    - [Custom file name](#custom-file-name)
+
 ## Installation
 
 ```bash
@@ -18,65 +44,70 @@ Using the default settings, the `content.json` file looks like the following str
 
 ```javascript
 meta: {
-    title: hexo.config.title,
-    subtitle: hexo.config.subtitle,
-    description: hexo.config.description,
-    author: hexo.config.author,
-    url: hexo.config.url
+  title: hexo.config.title,
+  subtitle: hexo.config.subtitle,
+  description: hexo.config.description,
+  author: hexo.config.author,
+  url: hexo.config.url
 },
 pages: [{ //-> all pages
-    title: page.title,
-    slug: page.slug,
-    date: page.date,
-    updated: page.updated,
-    comments: page.comments,
-    permalink: page.permalink,
-    path: page.path,
-    excerpt: page.excerpt, //-> only text ;)
-    keywords: null //-> it needs settings
-    text: page.content, //-> only text minified ;)
-    raw: page.raw, //-> original MD content
-    content: page.content //-> final HTML content
+  title: page.title,
+  slug: page.slug,
+  date: page.date,
+  updated: page.updated,
+  comments: page.comments,
+  permalink: page.permalink,
+  path: page.path,
+  excerpt: page.excerpt, //-> only text ;)
+  keywords: null, //-> it needs settings
+  text: page.content, //-> only text minified ;)
+  raw: page.raw, //-> original MD content
+  content: page.content, //-> final HTML content
+  author: page.author
 }],
 posts: [{ //-> only published posts
-    title: post.title,
-    slug: post.slug,
-    date: post.date,
-    updated: post.updated,
-    comments: post.comments,
-    permalink: post.permalink,
-    path: post.path,
-    excerpt: post.excerpt, //-> only text ;)
-    keywords: null //-> it needs settings
-    text: post.content, //-> only text minified ;)
-    raw: post.raw, //-> original MD content
-    content: post.content, //-> final HTML content
-    categories: [{
-        name: category.name,
-        slug: category.slug,
-        permalink: category.permalink
-    }],
-    tags: [{
-        name: tag.name,
-        slug: tag.slug,
-        permalink: tag.permalink
-    }]
+  title: post.title,
+  slug: post.slug,
+  date: post.date,
+  updated: post.updated,
+  comments: post.comments,
+  permalink: post.permalink,
+  path: post.path,
+  excerpt: post.excerpt, //-> only text ;)
+  keywords: null, //-> it needs settings
+  text: post.content, //-> only text minified ;)
+  raw: post.raw, //-> original MD content
+  content: post.content, //-> final HTML content
+  author: post.author,
+  categories: [{
+    name: category.name,
+    slug: category.slug,
+    permalink: category.permalink
+  }],
+  tags: [{
+    name: tag.name,
+    slug: tag.slug,
+    permalink: tag.permalink
+  }]
 }]
 ```
 
 `hexo.util.stripHTML` is used to get only clean text for `excerpt` and `text` fields.
 
-## Configuration
+## Settings
 
-You can set some options in `_config.yml` to generate a custom `content.json`.
+You can customize settings in `_config.yml`.
 
-Default options are as follows:
+### Defaults
+
+Default settings are:
 
 ```yaml
 jsonContent:
   meta: true
-  keywords: false # language name option
-  dateFormat: undefined # format string
+  keywords: false
+  dateFormat: undefined
+  file: content.json
   pages:
     title: true
     slug: true
@@ -87,10 +118,11 @@ jsonContent:
     link: true
     permalink: true
     excerpt: true
-    keywords: true # but only if root keywords option language was set
+    keywords: false
     text: true
     raw: false
     content: false
+    author: true
   posts:
     title: true
     slug: true
@@ -101,54 +133,40 @@ jsonContent:
     link: true
     permalink: true
     excerpt: true
-    keywords: true # but only if root keywords option language was set
+    keywords: false
     text: true
     raw: false
     content: false
+    author: true
     categories: true
     tags: true
 ```
+
+### Keywords
+
+`keywords` options extracts keywords from excerpt.
+
+Setting the root `keywords` option will automatically reflect to `pages.keywords` and `posts.keywords`. But you can ignore one by setting it to `false` explicitly.
+
+It is powered by [michaeldelorenzo/keyword-extractor](https://github.com/michaeldelorenzo/keyword-extractor), NPM package to create a keywords array from a string by removing stopwords.
+
+So, the setting value should be a valid language from its [options parameters](https://github.com/michaeldelorenzo/keyword-extractor#options-parameters).
+
+If it don't support your language, no worry! It's disabled by default.
 
 ### Date formats
 
 `dateFormat` option sets an output format for datetime objects `date` and `updated`.
 
-It uses [moment](https://github.com/moment/moment/) to do the trick, so any string accepted by [format](http://momentjs.com/docs/#/displaying/format/) method can be used.
+It is powered by [moment](https://github.com/moment/moment/), so any string accepted by [format](http://momentjs.com/docs/#/displaying/format/) method can be used.
 
 If not defined, default format is the `JSON.stringify` result for `Date` objects.
 
-
-### Keywords
-
-`keywords` options extracts keywords from excerpt using [michaeldelorenzo/keyword-extractor](https://github.com/michaeldelorenzo/keyword-extractor), NPM package to create a keywords array from a string by removing stopwords.
-
-If **keyword-extractor** don't supports your language, don't worry! It's disabled by default.
-
-You can exclude meta, pages or posts contents from `content.json` by setting `meta`, `pages`, or `posts` to `false`.
-
-To exclude individual fields from `pages` or `posts` output set their config values to `false`.
-
-To exclude specific paths or tags, use an `ignore` list. Any path or tag that contains at least one of the listed substrings will be skipped from indexing. For example:
-
-```yaml
-jsonContent:
-  ignore:
-    paths:
-      - path/to/a/page
-      - url/to/one/post
-      - an-entire-category
-      - specific.file
-      - .ext # a file extension
-    tags:
-      - tag1
-      - tag2
-```
-
-Moreover, you can exclude a specific post/page by defining a field `hidden` and setting it to true. Also, you can set `hidden` to false to override all the rules mentioned above.
-
 ## Output
 
-By default, the json output includes `meta`, `pages` and `posts` sections. If only one section is enabled by config, the json output will consist of a single array.
+### Sections
+
+By default, the JSON output includes `meta`, `pages` and `posts` sections. If only one of these sections is enabled by config, the json output will consist of a single array.
 
 For example, the following config enables only `posts`, showing title, date, path, and text fields:
 
@@ -171,9 +189,10 @@ jsonContent:
     excerpt: false
     categories: false
     tags: false
+    author: false
 ```
 
-The result `content.json` will look like this:
+The result JSON will look like this:
 
 ```javascript
 [{ //-> only published posts
@@ -184,6 +203,41 @@ The result `content.json` will look like this:
 }]
 ```
 
-## Usage examples
+### Excluding fields
 
-Coming soon...
+You can exclude `meta`, `pages` or `posts` contents from output JSON by setting `meta`, `pages`, or `posts` to `false`.
+
+To exclude individual fields from `pages` or `posts` output, set its config values to `false`.
+
+### Skip indexing
+
+Any `post` or `page` protected with password will be automatically skipped from indexing.
+
+You can also exclude a specific `post` or `page` by setting `hidden: true` on front-matter.
+
+To exclude specific paths or tags, use `ignore` lists. Any path or tag which contains at least one of the listed substrings will be skipped from indexing. For example:
+
+```yaml
+jsonContent:
+  ignore:
+    paths:
+      - path/to/a/page
+      - url/to/one/post
+      - an-entire-category
+      - specific.file
+      - .ext # a file extension
+    tags:
+      - tag1
+      - tag2
+```
+
+Also, you can set `hidden: false` to override all the rules mentioned above.
+
+### Custom file name
+
+By default, the output file is `content.json`, but is possible to customize the file name:
+
+```yaml
+jsonContent:
+  file: custom-file-name.json
+```

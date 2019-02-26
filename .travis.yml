@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+- node
+sudo: false
+install:
+- npm ci
+script:
+- npm run dist
+deploy:
+  provider: npm
+  email: git.alexbr@outlook.com
+  api_key: $NPM_TOKEN
+  skip_cleanup: true
+  on:
+    tags: true
