@@ -14,9 +14,9 @@ export function catags ({ name, slug, permalink }) {
   return { name, slug, permalink }
 }
 
-export function getKeywords (str, cfg) {
+export function getKeywords (str, language) {
   const keywords = extract(str, {
-    language: cfg.keywords,
+    language,
     remove_digits: true,
     return_changed_case: true,
     remove_duplicates: true
@@ -38,7 +38,7 @@ export function setContent (obj, item, ref, cfg) {
     case 'keywords':
       if (cfg.keywords) {
         const excerpt = minify(ref.excerpt)
-        obj.keywords = getKeywords(excerpt)
+        obj.keywords = getKeywords(excerpt, cfg.keywords)
       }
       break
 
