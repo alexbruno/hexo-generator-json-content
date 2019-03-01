@@ -158,6 +158,16 @@ It is powered by [michaeldelorenzo/keyword-extractor](https://github.com/michael
 
 So, the setting value should be a valid language from its [options parameters](https://github.com/michaeldelorenzo/keyword-extractor#options-parameters).
 
+
+```yaml
+# exemple
+jsonContent:
+  meta: true
+  dafts: false
+  keywords: french
+```
+
+
 If it don't support your language, no worry! It's disabled by default.
 
 ### Date formats
