@@ -111,9 +111,9 @@ Default settings are:
 jsonContent:
   meta: true
   dafts: false
-  keywords: false
-  dateFormat: undefined
   file: content.json
+  keywords: undefined
+  dateFormat: undefined
   pages:
     title: true
     slug: true
@@ -158,15 +158,12 @@ It is powered by [michaeldelorenzo/keyword-extractor](https://github.com/michael
 
 So, the setting value should be a valid language from its [options parameters](https://github.com/michaeldelorenzo/keyword-extractor#options-parameters).
 
-
 ```yaml
 # exemple
 jsonContent:
   meta: true
-  dafts: false
   keywords: french
 ```
-
 
 If it don't support your language, no worry! It's disabled by default.
 
@@ -175,6 +172,13 @@ If it don't support your language, no worry! It's disabled by default.
 `dateFormat` option sets an output format for datetime objects `date` and `updated`.
 
 It is powered by [moment](https://github.com/moment/moment/), so any string accepted by [format](http://momentjs.com/docs/#/displaying/format/) method can be used.
+
+```yaml
+# exemple
+jsonContent:
+  meta: true
+  dateFormat: DD/MM/YYYY
+```
 
 If not defined, default format is the `JSON.stringify` result for `Date` objects.
 
@@ -187,6 +191,7 @@ By default, the JSON output includes `meta`, `pages` and `posts` sections. If on
 For example, the following config enables only `posts`, showing title, date, path, and text fields:
 
 ```yaml
+# exemple
 jsonContent:
   meta: false
   pages: false
@@ -232,6 +237,7 @@ By default, drafts are automatically skipped from indexing.
 If you want to include drafts, set `drafts: true`:
 
 ```yaml
+# exemple
 jsonContent:
   drafts: true
 ```
@@ -245,6 +251,7 @@ You can also exclude a specific `post` or `page` by setting `hidden: true` on fr
 To exclude specific paths or tags, use `ignore` lists. Any path or tag which contains at least one of the listed substrings will be skipped from indexing. For example:
 
 ```yaml
+# exemple
 jsonContent:
   ignore:
     paths:
@@ -265,6 +272,7 @@ Also, you can set `hidden: false` to override all the rules mentioned above.
 By default, the output file is `content.json`, but is possible to customize the file name:
 
 ```yaml
+# exemple
 jsonContent:
   file: custom-file-name.json
 ```
