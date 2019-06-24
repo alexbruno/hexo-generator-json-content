@@ -3,13 +3,11 @@ import { isIgnored, ignoreSettings } from './modules/ignore'
 import { getProps, has, reduceContent } from './modules/utils'
 
 const { config } = hexo
-
-const json = config.jsonContent || { meta: true }
-
+const defs = { meta: true }
+const opts = config.jsonContent || {}
+const json = { ...defs, ...opts }
 const pages = has(json, 'pages') ? json.pages : defaults.pages
-
 const posts = has(json, 'posts') ? json.posts : defaults.posts
-
 const ignore = ignoreSettings(json)
 
 let output = json.meta ? {
