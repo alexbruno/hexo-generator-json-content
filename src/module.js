@@ -6,9 +6,11 @@ const { config } = hexo
 
 const json = config.jsonContent || { meta: true }
 
-const pages = json.hasOwnProperty('pages') ? json.pages : defaults.pages
+const has = (obj, key) => Object.prototype.hasOwnProperty.call(obj, key)
 
-const posts = json.hasOwnProperty('posts') ? json.posts : defaults.posts
+const pages = has(json, 'pages') ? json.pages : defaults.pages
+
+const posts = has(json, 'posts') ? json.posts : defaults.posts
 
 const ignore = ignoreSettings(json)
 
