@@ -2,6 +2,10 @@ import moment from 'moment'
 import { extract } from 'keyword-extractor'
 import { stripHTML } from 'hexo-util'
 
+export function has (obj, key) {
+  return Object.prototype.hasOwnProperty.call(obj, key)
+}
+
 export function minify (str) {
   return stripHTML(str).trim().replace(/\s+/g, ' ')
 }

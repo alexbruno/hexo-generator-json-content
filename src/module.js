@@ -1,12 +1,10 @@
 import defaults from './modules/defaults'
 import { isIgnored, ignoreSettings } from './modules/ignore'
-import { getProps, reduceContent } from './modules/utils'
+import { getProps, has, reduceContent } from './modules/utils'
 
 const { config } = hexo
 
 const json = config.jsonContent || { meta: true }
-
-const has = (obj, key) => Object.prototype.hasOwnProperty.call(obj, key)
 
 const pages = has(json, 'pages') ? json.pages : defaults.pages
 
