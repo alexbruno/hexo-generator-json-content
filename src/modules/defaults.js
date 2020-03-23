@@ -13,7 +13,7 @@ export default {
     excerpt: true,
     text: true,
     keywords: true,
-    author: true
+    author: true,
   },
 
   posts: {
@@ -32,6 +32,6 @@ export default {
     categories: true,
     tags: true,
     keywords: true,
-    author: true
-  }
+    author: true,
+  },
 }
