@@ -9,7 +9,7 @@
     "patch": "npm version patch && npm run push",
     "prepare": "npm run dist",
     "push": "git push && git push --tags",
-    "lint": "prettier --write ./src/**/*.js",
+    "lint": "prettier --write ./src/*.js ./src/**/*.js",
     "dist": "run-s dist:*",
     "dist:lint": "npm run lint",
     "dist:clean": "npm run clean",

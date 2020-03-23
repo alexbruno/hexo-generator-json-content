@@ -62,7 +62,17 @@ pages: [{ //-> all pages
   text: page.content, //-> only text minified ;)
   raw: page.raw, //-> original MD content
   content: page.content, //-> final HTML content
-  author: page.author
+  author: page.author,
+  categories: [{
+    name: category.name,
+    slug: category.slug,
+    permalink: category.permalink
+  }],
+  tags: [{
+    name: tag.name,
+    slug: tag.slug,
+    permalink: tag.permalink
+  }]
 }],
 posts: [{ //-> only published posts
   title: post.title,

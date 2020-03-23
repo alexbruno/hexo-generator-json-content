@@ -82,10 +82,19 @@ export function reduceContent(props, content, cfg) {
 }
 
 export function reduceCategs(posts) {
-  const source = posts.map((post) => ({
-    categories: post.categories ? post.categories.map(JSON.stringify) : [],
-    tags: post.tags ? post.tags.map(JSON.stringify) : [],
-  }))
+  const source = posts
+    .map((post) => ({
+      categories: post.categories ? post.categories.map(JSON.stringify) : [],
+      tags: post.tags ? post.tags.map(JSON.stringify) : [],
+    }))
+    .reduce(
+      (res, item) => {
+        res.categories.push(...item.categories)
+        res.tags.push(...item.tags)
+        return res
+      },
+      { categories: [], posts: [] },
+    )
 
   const categories = [...new Set(source.categories)].map(JSON.parse)
   const tags = [...new Set(source.tags)].map(JSON.parse)
