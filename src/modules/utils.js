@@ -93,7 +93,7 @@ export function reduceCategs(posts) {
         res.tags.push(...item.tags)
         return res
       },
-      { categories: [], posts: [] },
+      { categories: [], tags: [] },
     )
 
   const categories = [...new Set(source.categories)].map(JSON.parse)
