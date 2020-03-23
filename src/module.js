@@ -38,10 +38,10 @@ hexo.extend.generator.register('json-content', (site) => {
     if (posts || json.meta) {
       output = Object.assign(output, { pages: pagesContent })
 
-      const { pagesCategs, pagesTags } = reduceCategs(pagesContent)
+      const pagesCategs = reduceCategs(pagesContent)
 
-      categs.categories.push(...pagesCategs)
-      categs.tags.push(...pagesTags)
+      categs.categories.push(...pagesCategs.categories)
+      categs.tags.push(...pagesCategs.tags)
     } else {
       output = pagesContent
     }
@@ -61,10 +61,10 @@ hexo.extend.generator.register('json-content', (site) => {
     if (pages || json.meta) {
       output = Object.assign(output, { posts: postsContent })
 
-      const { postsCategs, postsTags } = reduceCategs(postsContent)
+      const postsCategs = reduceCategs(postsContent)
 
-      categs.categories.push(...postsCategs)
-      categs.tags.push(...postsTags)
+      categs.categories.push(...postsCategs.categories)
+      categs.tags.push(...postsCategs.tags)
     } else {
       output = postsContent
     }
