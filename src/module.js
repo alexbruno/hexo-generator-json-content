@@ -1,6 +1,6 @@
 import defaults from './modules/defaults'
 import { isIgnored, ignoreSettings } from './modules/ignore'
-import { getProps, has, reduceContent } from './modules/utils'
+import { getProps, has, reduceContent, reduceCategs } from './modules/utils'
 
 const { config } = hexo
 const defs = { meta: true }
@@ -23,31 +23,25 @@ let output = json.meta ? {
 
 hexo.extend.generator.register('json-content', site => {
   if (pages) {
-    const pagesNames = getProps(pages)
+    const pagesProps = getProps(pages)
     const pagesValid = site.pages.filter(page => !isIgnored(page, ignore))
-    const pagesContent = pagesValid.map(page => reduceContent(pagesNames, page, json))
+    const pagesContent = pagesValid.map(page => reduceContent(pagesProps, page, json))
 
-    if (posts || json.meta) {
-      output.pages = pagesContent
-    } else {
-      output = pagesContent
-    }
+    output = posts || json.meta ? Object.assign(output, { pages: pagesContent }) : pagesContent
   }
 
   if (posts) {
-    const postsNames = getProps(posts)
+    const postsProps = getProps(posts)
     const postsSorted = site.posts.sort('-date')
     const postsValid = postsSorted.filter(post => {
       const include = json.drafts || post.published
       return include && !isIgnored(post, ignore)
     })
-    const postsContent = postsValid.map(post => reduceContent(postsNames, post, json))
+    const postsContent = postsValid.map(post => reduceContent(postsProps, post, json))
 
-    if (pages || json.meta) {
-      output.posts = postsContent
-    } else {
-      output = postsContent
-    }
+    output = pages || json.meta
+      ? Object.assign(output, { posts: postsContent }, reduceCategs(postsContent))
+      : postsContent
   }
 
   return {

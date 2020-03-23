@@ -11,7 +11,7 @@ export function minify(str) {
 }
 
 export function getProps(ref) {
-  return Object.getOwnPropertyNames(ref).filter((item) => ref[item])
+  return Object.getOwnPropertyNames(ref).filter((key) => ref[key])
 }
 
 export function catags({ name, slug, permalink }) {
@@ -77,6 +77,18 @@ export function setContent(obj, item, ref, cfg) {
   return obj
 }
 
-export function reduceContent(names, content, cfg) {
-  return names.reduce((obj, item) => setContent(obj, item, content, cfg), {})
+export function reduceContent(props, content, cfg) {
+  return props.reduce((obj, item) => setContent(obj, item, content, cfg), {})
+}
+
+export function reduceCategs(posts) {
+  const source = posts.map((post) => ({
+    categories: post.categories ? post.categories.map(JSON.stringify) : [],
+    tags: post.tags ? post.tags.map(JSON.stringify) : [],
+  }))
+
+  const categories = [...new Set(source.categories)].map(JSON.parse)
+  const tags = [...new Set(source.tags)].map(JSON.parse)
+
+  return { categories, tags }
 }
