@@ -35,6 +35,10 @@ export function setContent(obj, item, ref, cfg) {
       obj.excerpt = minify(ref.excerpt)
       break
 
+    case 'description':
+      obj.description = minify(ref.description)
+      break
+
     case 'text':
       obj.text = minify(ref.content)
       break
