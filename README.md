@@ -4,44 +4,38 @@ Hexo (<https://hexo.io/>) plugin to generate a JSON file for generic use or cons
 
 It's useful to serve compact and agile content data for microservices like AJAX site search, Twitter typeahead or public API.
 
-## News
+<!-- vscode-markdown-toc -->
+* [News](#News)
+* [Installation](#Installation)
+* [Usage](#Usage)
+* [Settings](#Settings)
+	* [Defaults](#Defaults)
+	* [Keywords](#Keywords)
+	* [Date formats](#Dateformats)
+* [Output](#Output)
+	* [Sections](#Sections)
+	* [Excluding fields](#Excludingfields)
+	* [Drafts](#Drafts)
+	* [Skip indexing](#Skipindexing)
+	* [Custom file name](#Customfilename)
 
-It is now possible to:
+<!-- vscode-markdown-toc-config
+	numbering=false
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->
 
-- Customize the output file name
-- Include drafts on indexed content
-- Skip indexing by tag, besides by category or path
+## <a name='News'></a>News
 
-### Breaking change
+To know new features and bugfixes, please visit [releases index](https://github.com/alexbruno/hexo-generator-json-content/releases).
 
-`ignore` settings are a bit different now. It expects to receive one or two lists: `paths` and `tags`.
-
-## Table of contents
-
-- [hexo-generator-json-content](#hexo-generator-json-content)
-  - [News](#news)
-    - [Breaking change](#breaking-change)
-  - [Table of contents](#table-of-contents)
-  - [Installation](#installation)
-  - [Usage](#usage)
-  - [Settings](#settings)
-    - [Defaults](#defaults)
-    - [Keywords](#keywords)
-    - [Date formats](#date-formats)
-  - [Output](#output)
-    - [Sections](#sections)
-    - [Excluding fields](#excluding-fields)
-    - [Drafts](#drafts)
-    - [Skip indexing](#skip-indexing)
-    - [Custom file name](#custom-file-name)
-
-## Installation
+## <a name='Installation'></a>Installation
 
 ```bash
 npm i -S hexo-generator-json-content
 ```
 
-## Usage
+## <a name='Usage'></a>Usage
 
 Hexo will run the generator _automagically_ when you run `hexo serve` or `hexo generate`. :smirk:
 
@@ -78,7 +72,8 @@ posts: [{ //-> only published posts
   comments: post.comments,
   permalink: post.permalink,
   path: post.path,
-  excerpt: post.excerpt, //-> only text ;)
+  excerpt: post.excerpt, //-> only text minified ;)
+  description: post.description, //-> only text minified ;)
   keywords: null, //-> it needs settings
   text: post.content, //-> only text minified ;)
   raw: post.raw, //-> original MD content
@@ -94,16 +89,26 @@ posts: [{ //-> only published posts
     slug: tag.slug,
     permalink: tag.permalink
   }]
+}],
+categories: [{ //-> Posts categories index ;)
+  name: category.name,
+  slug: category.slug,
+  permalink: category.permalink
+}],
+tags: [{ //-> Posts tags index ;)
+  name: tag.name,
+  slug: tag.slug,
+  permalink: tag.permalink
 }]
 ```
 
 `hexo.util.stripHTML` is used to get only clean text for `excerpt` and `text` fields.
 
-## Settings
+## <a name='Settings'></a>Settings
 
 You can customize settings in `_config.yml`.
 
-### Defaults
+### <a name='Defaults'></a>Defaults
 
 Default settings are:
 
@@ -148,7 +153,7 @@ jsonContent:
     tags: true
 ```
 
-### Keywords
+### <a name='Keywords'></a>Keywords
 
 `keywords` options extracts keywords from excerpt.
 
@@ -167,7 +172,7 @@ jsonContent:
 
 If it don't support your language, no worry! It's disabled by default.
 
-### Date formats
+### <a name='Dateformats'></a>Date formats
 
 `dateFormat` option sets an output format for datetime objects `date` and `updated`.
 
@@ -182,9 +187,9 @@ jsonContent:
 
 If not defined, default format is the `JSON.stringify` result for `Date` objects.
 
-## Output
+## <a name='Output'></a>Output
 
-### Sections
+### <a name='Sections'></a>Sections
 
 By default, the JSON output includes `meta`, `pages` and `posts` sections. If only one of these sections is enabled by config, the json output will consist of a single array.
 
@@ -224,13 +229,13 @@ The result JSON will look like this:
 }]
 ```
 
-### Excluding fields
+### <a name='Excludingfields'></a>Excluding fields
 
 You can exclude `meta`, `pages` or `posts` contents from output JSON by setting `meta`, `pages`, or `posts` to `false`.
 
 To exclude individual fields from `pages` or `posts` output, set its config values to `false`.
 
-### Drafts
+### <a name='Drafts'></a>Drafts
 
 By default, drafts are automatically skipped from indexing.
 
@@ -242,7 +247,7 @@ jsonContent:
   drafts: true
 ```
 
-### Skip indexing
+### <a name='Skipindexing'></a>Skip indexing
 
 Any `post` or `page` protected with password will be automatically skipped from indexing.
 
@@ -267,7 +272,7 @@ jsonContent:
 
 Also, you can set `hidden: false` to override all the rules mentioned above.
 
-### Custom file name
+### <a name='Customfilename'></a>Custom file name
 
 By default, the output file is `content.json`, but is possible to customize the file name:
 
