@@ -125,7 +125,7 @@ Default settings are:
 ```yaml
 jsonContent:
   meta: true
-  dafts: false
+  drafts: false
   file: content.json
   keywords: undefined
   dateFormat: undefined
